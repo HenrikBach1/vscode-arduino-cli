@@ -1,0 +1,41 @@
+{
+    "name": "Arduino CLI DevContainer",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".",
+        "args": {
+            "USER_UID": "${localEnv:USER_UID}",
+            "USER_GID": "${localEnv:USER_GID}"
+        }
+    },
+    "remoteUser": "devuser",
+    "workspaceMount": "source=${localEnv:HOME}/projects,target=/projects,type=bind",
+    "workspaceFolder": "/projects",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools"
+            ],
+            "settings": {
+                "cmake.configureOnOpen": false,
+                "cmake.scanForKits": false,
+                "cmake.generator": "Ninja",
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash"
+                    }
+                }
+            }
+        }
+    },
+    "remoteEnv": {
+        "PATH": "/home/devuser/.arduino-cli/tools:/usr/bin:/bin:/usr/sbin:/sbin:$PATH",
+        "HOME": "/home/devuser"
+    },
+    "runArgs": [
+        "--privileged"
+    ],
+    "postCreateCommand": "/bin/bash .devcontainer/monitor_usb_ports.sh &"
+}
