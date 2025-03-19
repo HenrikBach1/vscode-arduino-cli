@@ -2,11 +2,7 @@
     "name": "Arduino CLI DevContainer",
     "build": {
         "dockerfile": "Dockerfile",
-        "context": ".",
-        "args": {
-            "USER_UID": "${localEnv:USER_UID}",
-            "USER_GID": "${localEnv:USER_GID}"
-        }
+        "context": "."
     },
     "remoteUser": "devuser",
     "workspaceMount": "source=${localEnv:HOME}/projects,target=/projects,type=bind",
@@ -14,6 +10,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
+                "vscode-arduino.vscode-arduino-community",
+                "ms-vscode.vscode-serial-monitor",
                 "ms-vscode.cpptools",
                 "ms-vscode.cmake-tools"
             ],
@@ -35,6 +33,7 @@
         "HOME": "/home/devuser"
     },
     "runArgs": [
+        "--device=/dev/ttyUSB0",
         "--privileged"
     ],
     "postCreateCommand": "/bin/bash .devcontainer/monitor_usb_ports.sh &"
