@@ -5,15 +5,18 @@
         "context": "."
     },
     "remoteUser": "devuser",
-    "workspaceMount": "source=${localEnv:HOME}/projects,target=/projects,type=bind",
-    "workspaceFolder": "/projects",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "customizations": {
         "vscode": {
             "extensions": [
                 "vscode-arduino.vscode-arduino-community",
                 "ms-vscode.vscode-serial-monitor",
                 "ms-vscode.cpptools",
-                "ms-vscode.cmake-tools"
+                "ms-vscode.cmake-tools",
+                "vsciot-vscode.vscode-arduino",
+                "arduino.arduino-board-manager",
+                "arduino.arduino-language-server"
             ],
             "settings": {
                 "cmake.configureOnOpen": false,
@@ -24,17 +27,26 @@
                     "bash": {
                         "path": "/bin/bash"
                     }
-                }
+                },
+                "arduino.path": "/usr/local/bin",
+                "arduino.commandPath": "arduino-cli",
+                "arduino.logLevel": "info",
+                "arduino.enableUSBDetection": true
             }
         }
     },
     "remoteEnv": {
-        "PATH": "/home/devuser/.arduino-cli/tools:/usr/bin:/bin:/usr/sbin:/sbin:$PATH",
-        "HOME": "/home/devuser"
+        "PATH": "/usr/local/bin:/home/devuser/.arduino-cli/tools:/usr/bin:/bin:/usr/sbin:/sbin:$PATH",
+        "HOME": "/home/devuser",
+        "ARDUINO_CLI_CONFIG_PATH": "/home/devuser/.arduino-cli"
     },
     "runArgs": [
         "--device=/dev/ttyUSB0",
         "--privileged"
     ],
-    "postCreateCommand": "/bin/bash .devcontainer/monitor_usb_ports.sh &"
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind"
+    ],
+    "initializeCommand": "./.devcontainer/prepare-environment.sh",
+    "postCreateCommand": "bash .devcontainer/setup_env.sh && echo 'Container successfully created. Arduino CLI configured.'"
 }
