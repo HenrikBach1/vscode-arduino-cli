@@ -1,0 +1,12 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cmake.configureOnOpen": false,
+        "cmake.scanForKits": false,
+        "cmake.generator": "Ninja"
+    }
+}

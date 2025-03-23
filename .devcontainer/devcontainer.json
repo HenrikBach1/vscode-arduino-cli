@@ -5,8 +5,8 @@
         "context": "."
     },
     "remoteUser": "devuser",
-    "workspaceMount": "source=${localEnv:HOME}/projects,target=/projects,type=bind",
-    "workspaceFolder": "/projects",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "workspaceFolder": "/workspace",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -35,6 +35,5 @@
     "runArgs": [
         "--device=/dev/ttyUSB0",
         "--privileged"
-    ],
-    "postCreateCommand": "/bin/bash .devcontainer/monitor_usb_ports.sh &"
+    ]
 }

@@ -30,6 +30,9 @@ done && apt-get clean
 # Install Arduino CLI
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 
+# Install tini for process management
+RUN apt-get update && apt-get install -y tini && apt-get clean
+
 # Add user and set permissions
 ARG USERNAME=devuser
 ARG USER_UID=1000
@@ -50,6 +53,14 @@ RUN if ! getent group dialout >/dev/null; then groupadd -g 20 dialout; fi && \
 RUN echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} && \
     chmod 0440 /etc/sudoers.d/${USERNAME}
 
-# Entry point for the container
-ENTRYPOINT [ "/bin/bash" ]
-CMD [ "/bin/bash" ]
+# Copy the USB monitoring script into the container
+COPY .devcontainer/monitor_usb_ports.sh /usr/local/bin/monitor_usb_ports.sh
+RUN chmod +x /usr/local/bin/monitor_usb_ports.sh
+
+# Remove the systemd service setup
+
+# Use tini as the entry point
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+# Modify CMD to start an interactive shell only
+CMD ["/bin/bash"]
